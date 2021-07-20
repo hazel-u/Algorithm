@@ -1,8 +1,8 @@
-package bj;
+package boj;
 
 import java.util.Scanner;
 
-public class Bj_2753 {
+public class Boj_2753 {
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 		

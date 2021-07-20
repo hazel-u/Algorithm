@@ -1,6 +1,6 @@
-package bj;
+package boj;
 
-public class Bj_2557 {
+public class Boj_2557 {
 
 	public static void main(String[] args) {
 		System.out.println("Hello World!");

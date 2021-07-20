@@ -1,4 +1,4 @@
-#### Algorithm 공부
+### Algorithm 공부
 
 언어 : JAVA
 

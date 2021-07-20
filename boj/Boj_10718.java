@@ -1,6 +1,6 @@
-package bj;
+package boj;
 
-public class Bj_10718 {
+public class Boj_10718 {
 
 	public static void main(String[] args) {
 		System.out.println("강한친구 대한육군");
