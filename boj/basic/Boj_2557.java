@@ -1,4 +1,4 @@
-package boj;
+package boj.basic;
 
 public class Boj_2557 {
 
