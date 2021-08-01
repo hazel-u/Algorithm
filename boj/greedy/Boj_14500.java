@@ -1,4 +1,4 @@
-package boj;
+package boj.greedy;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,16 +33,11 @@ public class Boj_14500 {
 		
 		// map 90도 돌리기
 		for(int i=0; i<4; i++) {
-			map=rotate(map);
 			maxV=Math.max(maxV, find(map));
+			maxV = Math.max(maxV, find(updown(map)));
+			map=rotate(map);
 		}
 		
-		
-		// map 뒤집기
-		maxV = Math.max(maxV, find(updown(map)));
-		map = rotate(map); // 원래 map으로 돌리고
-		// 한번 더 map 뒤집기
-		maxV = Math.max(maxV, find(updown(map)));
 		
 		System.out.println(maxV);
 		
@@ -68,10 +63,9 @@ public class Boj_14500 {
 		int m = arr[0].length;
 		int[][] rotate = new int[n][m];
 		
-		for(int i=0; i<n/2+1; i++) {
+		for(int i=0; i<n; i++) {
 			for(int j=0; j<m; j++) {
 				rotate[i][j] = arr[n-i-1][j];
-				rotate[n-i-1][j]=arr[i][j];
 			}
 		}
 		
@@ -81,15 +75,19 @@ public class Boj_14500 {
 	static int find(int[][] arr) {
 		int max=0;
 		
+		int r_s=arr.length;
+		int c_s = arr[0].length;
+		
 		// map에 mino를 적용시켜서 가장 큰 값을 찾아 출력
-		for(int mr=0; mr<r; mr++) {
-			for(int mc=0; mc<c; mc++) { // map전체를 돌면서
-				int cnt=0;
+		for(int mr=0; mr<r_s; mr++) {
+			for(int mc=0; mc<c_s; mc++) { // map전체를 돌면서
 				for(int i=0; i<5; i++) { // mino 5가지 다 적용시켜
+					int cnt=0;
 					for(int j=0; j<4; j++) {
 						int ni = mr+mino[i][j][0];
 						int nj = mc+mino[i][j][1];
-						if(ni>0 && ni<r && nj>0 && nj<r) { // 범위 안에 들고
+						if(ni>=0 && ni<r_s && nj>=0 && nj<c_s) { // 범위 안에 들고
+							//System.out.println(ni+" "+nj+"-------->"+arr.length+", "+arr[0].length);
 							cnt+=arr[ni][nj];
 						}else { // 한칸이라도 범위 안에 안들면 나가
 							cnt=0;
