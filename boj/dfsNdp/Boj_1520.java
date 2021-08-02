@@ -1,4 +1,4 @@
-package boj.dp;
+package boj.dfsNdp;
 
 import java.io.BufferedReader;
 import java.io.IOException;
