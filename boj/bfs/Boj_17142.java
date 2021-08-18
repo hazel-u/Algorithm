@@ -4,139 +4,124 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Boj_17142 {
+	private static int n,m;
+	private static int[][] map;
+	private static boolean[] visit;
 	
-	static int[][] original_map;
-	static Virus[] comV;
-	static ArrayList<Virus> v;
-	static int N,M;
-	static int[] dr = {-1,1,0,0};
-	static int[] dc = {0,0,-1,1};
-	static int min=98765421;
+	private static int result=Integer.MAX_VALUE;
+	private static int emptyCnt=0;
 	
+	private static int[] dx = {-1,0,1,0};
+	private static int[] dy = {0,1,0,-1};
+	
+	private static ArrayList<Virus> virusList = new ArrayList<>();
 	
 	static class Virus{
-		int r,c,cnt;
-
-		public Virus(int r, int c, int cnt) {
-			super();
-			this.r = r;
-			this.c = c;
-			this.cnt = cnt;
-		}
-
-		@Override
-		public String toString() {
-			return "Virus [r=" + r + ", c=" + c + ", cnt=" + cnt + "]";
+		int x, y, time;
+		Virus(int x, int y){
+			this.x = x;
+			this.y = y;
 		}
 		
+		Virus(int x, int y, int time){
+			this.x=x;
+			this.y=y;
+			this.time=time;
+		}
 	}
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+		n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 		
-		original_map = new int[N][N];
-		v = new ArrayList<>();
-		// 벽 -1, 비활성화 바이러스 -2, 활성화 바이러스 -3
-		for(int i=0; i<N; i++) {
+		map = new int[n+1][n+1];
+		
+		
+		for(int i=1; i<=n; i++) {
 			st = new StringTokenizer(br.readLine());
-			for(int j=0; j<N; j++) {
-				int temp = Integer.parseInt(st.nextToken());
-				if(temp==2) {
-					original_map[i][j]=-2;
-					v.add(new Virus(i,j,1));
-				}else if(temp==1) {
-					original_map[i][j]=-1;
-				}else {
-					original_map[i][j]=0;
+			for(int j=1; j<=n; j++) {
+				map[i][j]=Integer.parseInt(st.nextToken());
+				
+				if(map[i][j]==0) {
+					emptyCnt++;
+				}else if(map[i][j]==2) {
+					virusList.add(new Virus(i,j));
 				}
 			}
 		}
 		
-		comV = new Virus[M];
-		combination(0,0);
+		visit = new boolean[virusList.size()];
 		
-		if(min==987654321) {
-			System.out.println(-1);
-		}else System.out.println(min);
+		dfs(0,0);
+		
+		System.out.println(result == Integer.MAX_VALUE ? -1:result);
 		
 	}
 	
-	private static void combination(int cnt, int start) {
-		if(cnt==M) {
-			int[][] map = new int[N][N];
-			for(int i=0; i<N; i++) {
-				for(int j=0; j<N; j++) {
-					map[i][j]=original_map[i][j];
-				}
-			}
-			bfs(map);
+	private static void dfs(int start, int count) {
+		if(count==m) {
+			result = Math.min(result, spreadVirus());
 			return;
 		}
-		
-		for(int i=start; i<v.size(); i++) {
-			comV[cnt] = v.get(i);
-			combination(cnt+1, i+1);
+		for(int i=start; i<virusList.size(); i++) {
+			if(!visit[i]) {
+				visit[i]=true;
+				dfs(i+1,count+1);
+				visit[i]=false;
+			}
 		}
 	}
 	
-	private static void bfs(int[][] map) {
-		Queue<Virus> vq = new LinkedList<>();
+	private static int spreadVirus() {
+		Queue<Virus> q = new LinkedList<>();
 		
-		System.out.println(Arrays.toString(comV));
+		boolean[][] visited = new boolean[n+1][n+1];
 		
-		for(int i=0; i<comV.length; i++) {
-			map[comV[i].r][comV[i].c]=-3;
-			vq.offer(comV[i]);
+		//방문처리된 리스트만 큐에 담기
+		for(int i=0; i<virusList.size(); i++) {
+			if(visit[i]) q.add(new Virus(virusList.get(i).x, virusList.get(i).y,0));
 		}
 		
-		while(!vq.isEmpty()) {
-			Virus temp_v = vq.poll();
-			if(map[temp_v.r][temp_v.c]==0) {
-				map[temp_v.r][temp_v.c]=temp_v.cnt;
-			}
+		int value =0; // 시간
+		int zeroCnt=0; // 0 갯수
+		
+		while(!q.isEmpty()) {
+			Virus v = q.poll();
 			
-			for(int d=0; d<4; d++) {
-				if(temp_v.r+dr[d]>=0 && temp_v.r+dr[d]<N && temp_v.c+dc[d]>=0 && temp_v.c+dc[d]<N) { // 범위 안에 있고
-					if(map[temp_v.r+dr[d]][temp_v.c+dc[d]]==0 || map[temp_v.r+dr[d]][temp_v.c+dc[d]]==-2) { // 빈 칸 혹은 비활성화된 바이러스면
-						vq.offer(new Virus(temp_v.r+dr[d], temp_v.c+dc[d], temp_v.cnt+1));
+			int qx=v.x;
+			int qy=v.y;
+			int qt=v.time;
+			
+			for(int i=0; i<4; i++) {
+				int nx = qx+dx[i];
+				int ny = qy+dy[i];
+				
+				if(nx<1 || ny<1 || nx>n || ny>n) continue;
+				if(map[nx][ny]==1 || visited[nx][ny]) continue;
+				
+				if(map[nx][ny]!=1 && !visited[nx][ny]) { // 확산될 수 있는 곳이고, 전에 왔던 곳이 아니라면
+					if(map[nx][ny]==0) {
+						zeroCnt++;
+						value = qt+1;
 					}
-				}
-			}
-			
-		}
-		int max = 0;
-		for(int i=0; i<N; i++) {
-			for(int j=0; j<N; j++) {
-				if(map[i][j]==0) { // 바이러스가 퍼지지 못한 곳이 있다.
-					return;
-				}else {
-					max=Math.max(max, map[i][j]-1);
+					visited[nx][ny]=true;
+					
+					q.add(new Virus(nx,ny,qt+1));
 				}
 			}
 		}
-		min=Math.min(min, max);
-		return;
+		if(emptyCnt == zeroCnt) {
+			return value;
+		}
+		return Integer.MAX_VALUE;
 	}
 }
-
-
-/*
-5 1
-2 2 2 1 1
-2 1 1 1 1
-2 1 1 1 1
-2 1 1 1 1
-2 2 2 2 0
-
-위 테케 사용 시 dfs의 while문을 탈출 못함
-*/
