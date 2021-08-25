@@ -7,6 +7,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
+/*
+ * https://st-lab.tistory.com/255
+ * 분할 정복 이론 참고
+ */
+
 public class Boj_6549 {
 	static int[] histogram;
 	static int N;
