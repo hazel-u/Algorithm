@@ -16,13 +16,13 @@ public class Boj_13460 {
 	static int[] dc = {0,0,-1,1};
 	
 	static char[][] map;
-//	static boolean[][] Rvisited;
-//	static boolean[][] Bvisited;
 	
 	static Queue<ball> rq;
 	static Queue<ball> bq;
 	
 	static int goal_r, goal_c;
+	
+	static boolean[][][][] visited;
 	
 	static class ball{
 		int r;
@@ -45,7 +45,7 @@ public class Boj_13460 {
 		M = Integer.parseInt(st.nextToken());
 		
 		map = new char[N+2][M+2];
-		
+		visited = new boolean[N+2][M+2][N+2][M+2];
 		
 		rq = new LinkedList<>();
 		bq = new LinkedList<>();
@@ -81,10 +81,8 @@ public class Boj_13460 {
 			int cnt = red.cnt;
 			if(cnt==10) return -1;
 			
+			visited[red.r][red.c][blue.r][blue.c]=true;
 			
-			if(red.r==blue.r && red.c==blue.c) continue;
-			if(blue.r==goal_r && blue.c==goal_c) continue; // 빨간 공보다 파란공이 먼저 골에 들어가거나 동시에 들어가면 실패
-			else if(red.r==goal_r && red.c==goal_c) return cnt;
 			
 			for(int d=0; d<4; d++) {
 				// 가는 도중 구멍에 빠졌나 확인
@@ -101,7 +99,11 @@ public class Boj_13460 {
 				while(map[Rnr+dr[d]][Rnc+dc[d]]!='#') {
 					Rnr+=dr[d];
 					Rnc+=dc[d];
-					if(map[Rnr][Rnc]=='O') Rgoal=true;
+					Rcnt++;
+					if(map[Rnr][Rnc]=='O') {
+						Rgoal=true;
+						break;
+					}
 				}
 				
 				int Bnr=blue.r;
@@ -109,11 +111,15 @@ public class Boj_13460 {
 				while(map[Bnr+dr[d]][Bnc+dc[d]]!='#') {
 					Bnr+=dr[d];
 					Bnc+=dc[d];
-					if(map[Bnr][Bnc]=='O') Bgoal=true;
+					Bcnt++;
+					if(map[Bnr][Bnc]=='O') {
+						Bgoal=true;
+						break;
+					}
 				}
 				
 				if(Bgoal) continue;
-				else if(Rgoal) return cnt+1;
+				else if(!Bgoal && Rgoal) return cnt+1;
 				
 				if(Bnr==Rnr && Bnc==Rnc) {
 					if(Rcnt>Bcnt){
@@ -125,11 +131,13 @@ public class Boj_13460 {
 					}
 				}
 				
-				// 빨간공
-				rq.add(new ball(Rnr, Rnc, cnt+1));
-				
-				// 파란공
-				bq.add(new ball(Bnr, Bnc, cnt+1));
+				if(!visited[Rnr][Rnc][Bnr][Bnc]) {
+					// 빨간공
+					rq.add(new ball(Rnr, Rnc, cnt+1));
+					
+					// 파란공
+					bq.add(new ball(Bnr, Bnc, cnt+1));
+				}
 			}
 			
 		}

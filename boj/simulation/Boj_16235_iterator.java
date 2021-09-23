@@ -3,6 +3,7 @@ package boj.simulation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -20,9 +21,8 @@ public class Boj_16235_iterator {
 	
 	static LinkedList<Tree> trees;
 	static Queue<Tree> dead;
-	static int year;
 
-	static class Tree{
+	static class Tree implements Comparable<Tree>{
 		int r;
 		int c;
 		int age;
@@ -32,6 +32,11 @@ public class Boj_16235_iterator {
 			this.r = r;
 			this.c = c;
 			this.age = age;
+		}
+
+		@Override
+		public int compareTo(Tree o) {
+			return this.age-o.age;
 		}
 	}
 	public static void main(String[] args) throws IOException {
@@ -65,12 +70,15 @@ public class Boj_16235_iterator {
 			));
 		}
 		
+		Collections.sort(trees);
+		
 		simulation();
 		
 		System.out.println(trees.size());
 	}
 	
 	static public void simulation() {
+		int year=0;
 		while(true) {
 			if(year==k) return;
 			
