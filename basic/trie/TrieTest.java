@@ -1,10 +1,10 @@
 package basic.trie;
 
-public class Trie {
+public class TrieTest {
 	
 	Node root;
 	static final int ALPHABET_SIZE=26; // a-z
-	public Trie() {
+	public TrieTest() {
 		this.root = new Node();
 		this.root.val=' '; // root는 비었다.
 	}
@@ -19,7 +19,7 @@ public class Trie {
 	
 	public static void main(String[] args) {
 		// 문자열이 전부 소문자로 이루어졌다고 가정
-		Trie trie = new Trie();
+		TrieTest trie = new TrieTest();
         trie.insert("bar");
         trie.insert("bag");
         trie.insert("bark");
