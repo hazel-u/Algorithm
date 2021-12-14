@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 
 public class Boj_2751 {
 
@@ -55,6 +56,8 @@ public class Boj_2751 {
             for(int i=start; i<=end; i++){
                 arr[i]=temp[i];
             }
+            System.out.println(start+" "+end);
+            System.out.println(Arrays.toString(arr));
         }
     }
 }
