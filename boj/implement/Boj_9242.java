@@ -1,4 +1,4 @@
-package boj.bruteForce;
+package boj.implement;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
