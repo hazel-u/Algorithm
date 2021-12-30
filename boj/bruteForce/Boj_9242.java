@@ -2,7 +2,6 @@ package boj.bruteForce;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 public class Boj_9242 {
     public static void main(String[] args) throws Exception{
@@ -15,14 +14,12 @@ public class Boj_9242 {
 
         for(int i=0; i<5; i++){
             if(i!=0) Line = br.readLine();
-
             for(int j=0; j<colSize; j++){
-                if(Line.charAt(j)==' ') code[i][j]=false;
-                else code[i][j]=true;
+                code[i][j] = Line.charAt(j)!=' '?true:false;
             }
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int index=0;
 
         while(index<colSize-2){
