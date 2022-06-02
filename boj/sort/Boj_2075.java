@@ -28,7 +28,7 @@ public class Boj_2075 {
                 // pq의 사이즈가 N과 같다면
                 else if(pq.size()==N) {
                     int ele = pq.peek(); // 꺼내진 않고 확인
-                    if(ele>map[r][c]) break; // pq의 맨 위가 map[r][c]보다 작다면 그 줄은 이제 그만보기
+                    if(ele>map[r][c]) break; // pq의 맨 위가 map[r][c]보다 크다면 그 줄은 이제 그만보기
                     else { // map[r][c]가 ele보다 작다면, ele은 빼고 map[r][c]넣기
                         pq.poll();
                         pq.add(map[r][c]);
