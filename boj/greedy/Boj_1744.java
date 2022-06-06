@@ -11,8 +11,8 @@ public class Boj_1744 {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
 
-        ArrayList<Integer> plusList = new ArrayList<>(); // 0 ~ 1000
-        ArrayList<Integer> minusList = new ArrayList<>(); // -1000 ~ -1
+        ArrayList<Integer> plusList = new ArrayList<>(); // 1 ~ 1000
+        ArrayList<Integer> minusList = new ArrayList<>(); // -1000 ~ 0
 
         for(int i=0; i<N; i++) {
             int num = Integer.parseInt(br.readLine());
